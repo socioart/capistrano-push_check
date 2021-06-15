@@ -1,8 +1,6 @@
-# Capistrano::PushCheck
+# capistrano/push_check
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/push_check`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem check local git branch before all Capistrano tasks, to prevents deployment with unpushed branch.
 
 ## Installation
 
@@ -14,7 +12,7 @@ gem 'capistrano-push_check'
 
 And then execute:
 
-    $ bundle install
+    $ bundle
 
 Or install it yourself as:
 
@@ -22,7 +20,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add line below to `Capfile`.
+
+```ruby
+require "capistrano/push_check"
+```
+
+When you run `cap` command (with stage name), checks local branch. And if it is wrong, prints message below and abort deployment.
+
+        ================================================================================
+        !!! Local branch `master` is ahead of upstream by 1 commit(s). !!!
+        ================================================================================
+
+If you want to skip check, please set `skip_push_check` variable to `true`.
+
+```ruby
+set :skip_push_check, true
+```
 
 ## Development
 
@@ -33,7 +47,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/labocho/capistrano-push_check.
-
 
 ## License
 
