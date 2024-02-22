@@ -10,12 +10,20 @@ namespace :check do
     track = ` git branch --list --format '%(upstream:track)' #{local_branch}`.strip
 
     unless track == ""
-      track =~ /\[ahead (\d+)\]/
-      n = $~.captures.first.to_i
-      warn("=" * 80)
-      warn("!!! Local branch `#{local_branch}` is ahead of upstream by #{n} commit(s). !!!")
-      warn("=" * 80)
-      exit 1
+      case
+      when track =~ /\[ahead (\d+)\]/
+        n = $~.captures.first.to_i
+        warn("=" * 100)
+        warn("!!! Local branch `#{local_branch}` is ahead of upstream by #{n} commit(s). Please run `git push`. !!!")
+        warn("=" * 100)
+        exit 1
+      when track =~ /\[behind (\d+)\]/
+        n = $~.captures.first.to_i
+        warn("=" * 100)
+        warn("!!! Local branch `#{local_branch}` is behind of upstream by #{n} commit(s). Please run `git pull`. !!!")
+        warn("=" * 100)
+        exit 1
+      end
     end
   end
 end
